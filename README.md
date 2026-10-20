@@ -37,6 +37,11 @@ li .x{color:var(--muted);font-size:18px;padding:6px 10px}
 <body>
 <h1>🎵 My Music Player</h1>
 
+<div id="install" class="card" style="text-align:center">
+  <button id="shareBtn" class="add" style="font-size:20px;padding:22px">📲 Tap here to Add to Home Screen</button>
+  <div class="sub" id="shareHelp" style="margin-top:10px">Then in the menu that opens, scroll down and tap <b>Add to Home Screen</b>, then <b>Add</b>.</div>
+</div>
+
 <div class="card">
   <div class="now" id="title">Nothing playing</div>
   <div class="sub" id="sub">Add songs to get started</div>
@@ -194,6 +199,15 @@ $('file').onchange=async e=>{
   render();
   if(idx<0&&songs.length)load(0,false);
   if(memoryOnly)$('sub').textContent='Songs won’t be saved in this browser mode';
+};
+
+/* ---------- add to home screen helper ---------- */
+if(window.navigator.standalone||matchMedia('(display-mode: standalone)').matches){$('install').style.display='none'}
+$('shareBtn').onclick=async()=>{
+  try{
+    if(navigator.share){await navigator.share({title:'My Music Player',url:location.href})}
+    else{$('shareHelp').innerHTML='Tap the <b>Share</b> button at the bottom of Safari (square with an arrow), then <b>Add to Home Screen</b>.'}
+  }catch(e){if(e&&e.name!=='AbortError')$('shareHelp').innerHTML='Tap the <b>Share</b> button at the bottom of Safari (square with an arrow), then <b>Add to Home Screen</b>.'}
 };
 
 /* ---------- start ---------- */
